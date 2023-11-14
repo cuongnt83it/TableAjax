@@ -3,6 +3,7 @@
 }
 @section Scripts{
     <script src="~/lib/mustache.min..js"></script>
+	<script src="~/lib/jquery.twbspagination.min.js"></script>
 <script src="~/js/controller/homecontroller.js"></script>
 }
 <div class="row">
@@ -16,9 +17,10 @@
         </tr>
     </thead>
     <tbody id="tblData">
-        
     </tbody>
 </table>
+    <div id="pagination" class="pagination"></div>
+
     <script id="data-template" type="x-tmpl-mustache">
         <tr>
         <td>{{ID}}</td>
@@ -27,4 +29,4 @@
         <td>{{Status}}</td>
         </tr>
     </script>
-    </div>
+   </div>

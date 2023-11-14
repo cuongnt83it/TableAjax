@@ -1,4 +1,5 @@
-﻿var homeController = {
+﻿var homeconfig = { pageSize:3, pageIndex:1}
+var homeController = {
     init: function () {
        
         homeController.loadData();
@@ -30,7 +31,7 @@
                     alert('Update failed!');
                 }
             }
-        })
+        }) 
     },
 
     loadData: function () {
@@ -38,6 +39,10 @@
         $.ajax({
             url: 'Home/LoadData',
             type: 'GET',
+            data: {
+                page: homeconfig.pageIndex,
+                pageSize: homeconfig.pagesize
+            },
             dataType: 'Json',
             success: function (response) {
                 if (response.status) {
@@ -54,10 +59,30 @@
                         });
                     });
                     $('#tblData').html(html);
+                    homeController.paging(response.total, function () {
+                        homeController.loadData();
+                    });
                     homeController.registerEvent();
                 }
             }
         })
+    },
+    paging: function (totalRow, callback) {
+        var totalPage = Math.ceil(totalRow / homeconfig.pageSize);
+
+        $('#pagination').twbsPagination({
+            totalPages: totalPage,
+            first: "Đầu",
+            next: "Tiếp",
+            last: "Cuối",
+            prev: "Trước",
+            visiblePages: 10,
+            onPageClick: function (event, page) {
+                homeconfig.pageIndex = page;
+                //setTimeout(callback, 2000);
+                callback();
+            }
+        });
     }
 }
 homeController.init();

@@ -40,7 +40,7 @@ namespace WebApplication1.Controllers
         },
         new EmployeeModel()
         {
-            Id = 4,
+            Id = 5,
             Name = "Nguyễn Văn D",
             Salary = 355000,
             Status = false
@@ -51,7 +51,22 @@ namespace WebApplication1.Controllers
             Name = "Nguyễn Văn E",
             Salary = 366660,
             Status = true
-        }};
+        },
+        new EmployeeModel()
+        {
+            Id = 7,
+            Name = "Nguyễn Văn G",
+            Salary = 36633660,
+            Status = true
+        },
+        new EmployeeModel()
+        {
+            Id = 8,
+            Name = "Nguyễn Văn H",
+            Salary = 444333,
+            Status = true
+        }
+        };
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
@@ -76,12 +91,16 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public JsonResult LoadData()
-        {
-           
+        public JsonResult LoadData(int page, int pageSize=3)
+        {   
+            // Skip lấy từ bản ghi số mấy
+            //Take lấy bao nhiêu bản ghi
+            var model = listEmployee.Skip((page-1)*pageSize).Take(pageSize).ToList();
+            int totalRow = listEmployee.Count ;
             return Json(new
             {
-                data = listEmployee,
+                data = model,
+				total =  totalRow,
                 status = true
             });
         }
