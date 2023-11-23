@@ -1,4 +1,4 @@
-﻿var homeconfig = { pageSize:3, pageIndex:1}
+﻿var homeconfig = { pageSize:5, pageIndex:1}
 var homeController = {
     init: function () {
        
@@ -41,7 +41,7 @@ var homeController = {
             type: 'GET',
             data: {
                 page: homeconfig.pageIndex,
-                pageSize: homeconfig.pagesize
+                pageSize: homeconfig.pageSize
             },
             dataType: 'Json',
             success: function (response) {
@@ -55,7 +55,7 @@ var homeController = {
                             ID: item.id,
                             Name: item.name,
                             Salary: item.salary,
-                            Status: item.status
+                            Status: item.status == 1 ? "<span class=\"btn btn-success\">Actived</span>" : "<span class=\"btn  btn-danger\">Locked</span>"
                         });
                     });
                     $('#tblData').html(html);
