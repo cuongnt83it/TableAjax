@@ -19,19 +19,21 @@
 				<td>Name</td>
 				<td>Salary</td>
 				<td>Status</td>
+				<td>#</td>
 			</tr>
 		</thead>
 		<tbody id="tblData">
 		</tbody>
 	</table>
 	<div id="pagination" class="pagination"></div>
-
+	
 	<script id="data-template" type="x-tmpl-mustache">
 		<tr>
 		<td>{{ID}}</td>
 		<td>{{Name}}</td>
 		<td><input type="number" class="txtSalary" data-id="{{ID}}" value="{{Salary}}" /></td>
 		<td>{{{Status}}}</td>
+		<td><button class="btn btn-success btnEdit" data-id="{{ID}}"><i class="fa fa-pencil" aria-hidden="true"></i></button> <button class="btn btn-danger btnDelete" data-id="{{ID}}"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
 		</tr>
 	</script>
 </div>

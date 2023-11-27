@@ -54,7 +54,49 @@ namespace WebApplication1.Controllers
                 status = true
             });
         }
-        [HttpPost]
+		[HttpGet]
+		public JsonResult LoadDetail(int Id)
+		{
+            // Skip lấy từ bản ghi số mấy
+            //Take lấy bao nhiêu bản ghi
+
+            var model = _db.Employees.Find(Id);
+				
+			
+			return Json(new
+			{
+				data = model,
+				status = true
+			});
+		}
+		[HttpGet]
+		public JsonResult DeleteItem(int Id)
+		{
+            bool status = false;
+            string message = string.Empty;
+
+			var model = _db.Employees.Find(Id);
+            try {
+                if (model != null) {
+                    _db.Remove(model);
+                    _db.SaveChanges();
+                }
+				status = true;
+				
+			}
+			catch (Exception ex)
+            {
+				status = false;
+				message = ex.Message;
+			}
+
+			return Json(new
+			{
+				data = model,
+				status = true
+			});
+		}
+		[HttpPost]
         public JsonResult Update(string model)
         {
            Employee employee = JsonConvert.DeserializeObject<Employee>(model);

@@ -20,12 +20,58 @@ var homeController = {
         $('#btnSave').off('click').on('click', function (e) {
             homeController.saveData();
         });
+        $('.btnEdit').off('click').on('click', function (e) {
+            var id = $(this).data('id');
+            homeController.loadForm(id);
+            $('#modelAddUpdate').modal('show');
+        });
+        $('.btnDelete').off('click').on('click', function (e) {
+            var id = $(this).data('id');
+            var x = confirm("Are you sure you want to delete?");
+            if (x) {
+                homeController.deleteItem(id);
+            }
+        });
     },
     resetForm: function () {
         $('#hdId').val('0');
         $('#txtName').val('');
         $('#txtSalary').val(0);
         $('#ckStatus').prop('ckecked',true);
+    },
+    loadForm: function (id) {
+        $.ajax({
+            url: 'Home/LoadDetail',
+            type: 'GET',
+            dataType: 'json',
+            data: { Id: id },
+            success: function (response) {
+                if (response.status) {
+                    var data = response.data;
+                    $('#hdId').val(data.id);
+                    $('#txtName').val(data.name);
+                    $('#txtSalary').val(data.salary);
+                    $('#ckStatus').prop('ckecked',data.status);
+                } else {
+                    alert('Load failed!');
+                }
+            }
+        }) 
+    },
+    deleteItem: function (id) {
+        $.ajax({
+            url: 'Home/DeleteItem',
+            type: 'GET',
+            dataType: 'json',
+            data: { Id: id },
+            success: function (response) {
+                if (response.status) {
+                    homeController.loadData();
+                } else {
+                    alert('Delete failed!');
+                }
+            }
+        }) 
     },
     saveData: function () {
         var id = parseInt($('#hdId').val());
@@ -46,10 +92,11 @@ var homeController = {
                 model: JSON.stringify(employee)
             },
             success: function (response) {
-                if (status == true) {
+                if (response.status == true) {
                     alert('Save success');
                     $('#modelAddUpdate').modal('hide');
                     homeController.loadData();
+                   
                 } else {
                     alert(response.message);
                 }
