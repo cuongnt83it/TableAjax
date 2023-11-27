@@ -36,5 +36,9 @@ namespace TableAjaxEdit.Models.DataModel
 
         }
 
-    }
+		internal void SavedChanges()
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

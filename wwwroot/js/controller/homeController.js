@@ -1,4 +1,4 @@
-﻿var homeconfig = { pageSize:5, pageIndex:1}
+﻿var homeconfig = { pageSize:10, pageIndex:1}
 var homeController = {
     init: function () {
        
@@ -13,6 +13,51 @@ var homeController = {
                 homeController.updateSalary(id, value);
             }
         });
+        $('#btnAddNew').off('click').on('click', function (e) {
+            $('#modelAddUpdate').modal('show');
+            homeController.resetForm();
+        });
+        $('#btnSave').off('click').on('click', function (e) {
+            homeController.saveData();
+        });
+    },
+    resetForm: function () {
+        $('#hdId').val('0');
+        $('#txtName').val('');
+        $('#txtSalary').val(0);
+        $('#ckStatus').prop('ckecked',true);
+    },
+    saveData: function () {
+        var id = parseInt($('#hdId').val());
+        var name =  $('#txtName').val();
+        var salary = parseFloat($('#txtSalary').val());
+        var status = $('#ckStatus').prop('checked');
+        var employee= {
+            ID: id,
+            Name: name,
+            Salary: salary,
+            Status: status
+        };
+        $.ajax({
+            url: 'Home/SaveData',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                model: JSON.stringify(employee)
+            },
+            success: function (response) {
+                if (status == true) {
+                    alert('Save success');
+                    $('#modelAddUpdate').modal('hide');
+                    homeController.loadData();
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
     },
     updateSalary: function (id, value) {
         var data = {

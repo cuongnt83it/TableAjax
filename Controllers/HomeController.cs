@@ -58,14 +58,64 @@ namespace WebApplication1.Controllers
         public JsonResult Update(string model)
         {
            Employee employee = JsonConvert.DeserializeObject<Employee>(model);
-            //save
-            Employee entity = _db.Employees.Find(employee.Id);
-            entity.Salary = employee.Salary;
 
+			//save
+			bool status = false;
+			Employee entity = _db.Employees.Find(employee.Id);
+            if (entity != null)
+            {
+				entity.Salary = employee.Salary;
+				try
+				{
+					_db.SaveChanges();
+                     status = true;
+				}
+				catch (Exception ex)
+				{
+
+				}
+			}
+           
             return Json(new
             {
-                status = true
+                status
             });
         }
-    }
+		[HttpPost]
+		public JsonResult SaveData(string model)
+		{
+			Employee employee = JsonConvert.DeserializeObject<Employee>(model);
+            //save
+            bool status = false;
+            string message = string.Empty;
+			if (employee.Id == 0)
+			{
+                employee.CreatedDate = DateTime.Now;
+                _db.Add(employee);
+			}
+			else
+			{
+				Employee entity = _db.Employees.Find(employee.Id);
+				entity.Salary = employee.Salary;
+				entity.Status = employee.Status;
+				entity.Name = employee.Name;
+                _db.Update(entity);
+			}
+
+            try {
+                _db.SaveChanges();
+                status = true;
+            }catch(Exception ex) {
+                status = false;
+                message = ex.Message;
+            }
+
+
+			return Json(new
+			{
+				status= status,
+				message=message
+			});
+		}
+	}
 }
