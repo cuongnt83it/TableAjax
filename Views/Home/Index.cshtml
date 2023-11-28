@@ -7,7 +7,26 @@
 	<script src="~/js/controller/homecontroller.js"></script>
 }
 <div class="row">
-	<div class="col-md-12">
+	<div class="col-md-10">
+		<div class="row">
+			<div class="col-md-5">
+				<input type="text" class="form-control" placeholder="Typing Name" aria-label="Name" id="txtNameSearch">
+			</div>
+			<div class="col-md-3 align-self-center">
+				<select class="form-select" aria-label="Acitve" id="ddlStatusSearch">
+					<option selected value="">All</option>
+					<option value="true">Active</option>
+					<option value="false">Lock</option>
+					
+				</select>
+			</div>
+			<div class="col-md-4">
+				<button id="btnSearch" class="btn btn-primary" >Search</button>
+				<button id="btnReset" class="btn btn-success">Reset</button>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-2 text-end">
 		<button id="btnAddNew" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modelAddUpdate">Add New</button>
 	</div>
 </div>
@@ -59,7 +78,7 @@
 					<div class="form-check">
 						<input class="form-check-input" type="checkbox" value="" id="ckStatus" >
 						<label class="form-check-label" for="ckStatus">
-							Status
+							Active
 						</label>
 					</div>
 					

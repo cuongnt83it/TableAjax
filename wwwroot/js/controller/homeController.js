@@ -32,6 +32,21 @@ var homeController = {
                 homeController.deleteItem(id);
             }
         });
+        $('#btnSearch').off('click').on('click', function (e) {
+            homeController.loadData(true);
+        });
+        $('#txtNameSearch').off('keypress').on('keypress', function (e) {
+            if (e.which == 13) {
+                
+                homeController.loadData(true);
+            }
+        });
+        $('#btnReset').off('click').on('click', function (e) {
+
+             $('#txtNameSearch').val('');
+            $('#ddlStatusSearch').val('');
+            homeController.loadData(true);
+        });
     },
     resetForm: function () {
         $('#hdId').val('0');
@@ -66,7 +81,7 @@ var homeController = {
             data: { Id: id },
             success: function (response) {
                 if (response.status) {
-                    homeController.loadData();
+                    homeController.loadData(true);
                 } else {
                     alert('Delete failed!');
                 }
@@ -95,7 +110,7 @@ var homeController = {
                 if (response.status == true) {
                     alert('Save success');
                     $('#modelAddUpdate').modal('hide');
-                    homeController.loadData();
+                    homeController.loadData(true);
                    
                 } else {
                     alert(response.message);
@@ -126,12 +141,15 @@ var homeController = {
         }) 
     },
 
-    loadData: function () {
-      
+    loadData: function (changePageSize) {
+        var name = $('#txtNameSearch').val();
+        var status = $('#ddlStatusSearch').val();
         $.ajax({
             url: 'Home/LoadData',
             type: 'GET',
             data: {
+                name: name,
+                status: status,
                 page: homeconfig.pageIndex,
                 pageSize: homeconfig.pageSize
             },
@@ -153,14 +171,19 @@ var homeController = {
                     $('#tblData').html(html);
                     homeController.paging(response.total, function () {
                         homeController.loadData();
-                    });
+                    }, changePageSize);
                     homeController.registerEvent();
                 }
             }
         })
     },
-    paging: function (totalRow, callback) {
+    paging: function (totalRow, callback, changePageSize) {
         var totalPage = Math.ceil(totalRow / homeconfig.pageSize);
+        if ($('#pagination a').length == 0 || changePageSize == true) {
+            $('#pagination').empty();
+            $('#pagination').removeData("twbs-pagination");
+            $('#pagination').unbind("page");
+        }
 
         $('#pagination').twbsPagination({
             totalPages: totalPage,
@@ -171,7 +194,7 @@ var homeController = {
             visiblePages: 10,
             onPageClick: function (event, page) {
                 homeconfig.pageIndex = page;
-                //setTimeout(callback, 2000);
+                setTimeout(callback, 2000);
                 callback();
             }
         });

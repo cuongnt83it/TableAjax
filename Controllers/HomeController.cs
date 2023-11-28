@@ -38,15 +38,28 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public JsonResult LoadData(int page, int pageSize=3)
-        {   
+        public JsonResult LoadData(string name, string status, int page, int pageSize=3)
+        {
             // Skip lấy từ bản ghi số mấy
             //Take lấy bao nhiêu bản ghi
-             
-            var model = _db.Employees.OrderByDescending(x=> x.CreatedDate)
-                .Skip((page-1)*pageSize)
-                .Take(pageSize).ToList();
-            int totalRow = _db.Employees.Count() ;
+           IQueryable<Employee> model = _db.Employees;
+
+			 if (!string.IsNullOrEmpty(name))
+            {
+				model = model.Where(x => x.Name.Contains(name));
+
+			}
+			if (!string.IsNullOrEmpty(status))
+			{
+                bool statusBool = bool.Parse(status);
+				model = model.Where(x => x.Status == statusBool);
+
+			}
+			int totalRow = model.Count();
+			model = model.OrderByDescending(x => x.CreatedDate)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize);
+            
             return Json(new
             {
                 data = model,
