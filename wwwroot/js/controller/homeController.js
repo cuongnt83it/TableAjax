@@ -37,7 +37,7 @@ var homeController = {
         $('#hdId').val('0');
         $('#txtName').val('');
         $('#txtSalary').val(0);
-        $('#ckStatus').prop('ckecked',true);
+        $('#ckStatus').prop('checked',true);
     },
     loadForm: function (id) {
         $.ajax({
@@ -51,7 +51,7 @@ var homeController = {
                     $('#hdId').val(data.id);
                     $('#txtName').val(data.name);
                     $('#txtSalary').val(data.salary);
-                    $('#ckStatus').prop('ckecked',data.status);
+                    $('#ckStatus').prop('checked',data.status);
                 } else {
                     alert('Load failed!');
                 }
