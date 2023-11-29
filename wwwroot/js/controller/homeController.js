@@ -6,6 +6,30 @@ var homeController = {
         homeController.registerEvent();
     },
     registerEvent: function () {
+
+        $('#frmSaveData').validate({
+            rules: {
+                txtName: {
+                    required: true,
+                    minlength: 2,
+                },
+                txtSalary: {
+                    required: true,
+                    number: true
+                },
+            },
+            messages: {
+                txtName: {
+                    required: "Xin mời nhập tên",
+                    minlength: "Tên phải lớn hơn 2 ký tự"
+                },
+                txtSalary: {
+                    required: "Xin mời nhập lương",
+                    number: "Tên phải là kiểu số"
+                },
+            }
+        });
+
         $('.txtSalary').off('keypress').on('keypress', function (e) {
             if (e.which == 13) {
                 var id = $(this).data("id");
@@ -18,7 +42,10 @@ var homeController = {
             homeController.resetForm();
         });
         $('#btnSave').off('click').on('click', function (e) {
-            homeController.saveData();
+            if ($('#frmSaveData').valid()) {
+                homeController.saveData();
+            }
+           
         });
         $('.btnEdit').off('click').on('click', function (e) {
             var id = $(this).data('id');
